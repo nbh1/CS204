@@ -1,0 +1,65 @@
+////  Djistra  ////////
+
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define ll long long
+typedef pair<int, int> iPair;  
+
+struct node
+{
+    ll x; ll y; ll w;
+};
+
+void bellmanford(ll n, node edgelist[], ll e)
+{
+    ll spath[n];
+    for(ll i=0;i<n;i++)
+    {
+        spath[i] = INT_MAX;
+    }
+    // starting vertex 0;
+    spath[0] = 0;
+    
+    // relax n-1 times
+    for(ll i=1;i<=n-1;i++)
+    {
+        for(ll j=0;j<e;j++)
+        {
+            ll x = edgelist[j].x;
+            ll y = edgelist[j].y;
+            ll w = edgelist[j].w;
+            if(spath[y]>spath[x]+w && spath[x]!=INT_MAX)
+            {
+                spath[y] = spath[x]+w;
+            }
+        }
+    }
+    for(ll i=0;i<n;i++)
+    {
+        cout<<i<<" "<<spath[i]<<endl;
+    }
+}
+ 
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    ll v,e;
+    cin>>v>>e;
+    node edgelist[e];
+    for(ll i=0;i<e;i++)
+    {
+        ll x,y,w;
+        cin>>x>>y>>w;
+        edgelist[i].x=x;
+        edgelist[i].y=y;
+        edgelist[i].w=w;
+    }
+    bellmanford(v,edgelist,e);
+    
+    
+    return 0;
+}

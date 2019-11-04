@@ -1,0 +1,85 @@
+////  Kosa-raju  ////////
+
+#include <bits/stdc++.h>
+using namespace std;
+ 
+#define ll long long
+typedef pair<int, int> iPair;  
+
+void dfs_kosaraju(vector<ll>* adjlist, ll n, int* visited, stack<ll>&s, ll start)
+{
+    visited[start] = 1;
+    for(ll i=0;i<adjlist[start].size();i++)
+    {
+        ll ng = adjlist[start][i];
+        if(!visited[ng])
+        {
+            dfs_kosaraju(adjlist,n,visited,s,ng);
+        }
+    }
+    s.push(start);
+}
+
+void dfs_stack(vector<ll>* radjlist, ll n, ll cv, int* visited)
+{
+    visited[cv] = 1;
+    cout<<cv<<" ";
+    for(ll i=0;i<radjlist[cv].size();i++)
+    {
+        ll ng = radjlist[cv][i];
+        if(!visited[ng])
+        {
+            dfs_stack(radjlist,n,ng,visited);
+        }
+    }
+}
+
+void kosaraju(vector<ll>* adjlist, vector<ll>* radjlist, ll n)
+{
+    stack<ll> s;
+    int visited[n] = {0};
+    for(ll i=0;i<n;i++)
+    {
+        if(!visited[i])
+        {
+            dfs_kosaraju(adjlist,n,visited,s,i);
+        }
+    }
+    
+    for(ll i=0;i<n;i++)
+    {
+        visited[i] = 0;
+    }
+    
+    while(!s.empty())
+    {
+        ll cv = s.top();
+        s.pop();
+        if(!visited[cv])
+        {
+            dfs_stack(radjlist,n,cv,visited);
+            cout<<endl;
+        }
+    }
+}
+ 
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    ll v,e;
+    cin>>v>>e;
+    vector<ll> adjlist[v] ;
+    vector<ll> radjlist[v] ;
+    for(ll i=0;i<e;i++)
+    {
+        ll x,y;
+        cin>>x>>y;
+        adjlist[x].push_back(y);
+        radjlist[y].push_back(x);
+    }
+    kosaraju(adjlist,radjlist,v);
+    return 0;
+}
